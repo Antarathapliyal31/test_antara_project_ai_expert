@@ -1,0 +1,23 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Receipt",
+  "type": "object",
+  "required": ["merchant", "purchase_date", "total", "line_items"],
+  "properties": {
+    "merchant": { "type": ["string", "null"] },
+    "purchase_date": { "type": ["string", "null"], "format": "date" },
+    "total": { "type": "number" },
+    "line_items": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["description", "quantity", "price"],
+        "properties": {
+          "description": { "type": "string" },
+          "quantity": { "type": "integer", "minimum": 1 },
+          "price": { "type": "number" }
+        }
+      }
+    }
+  }
+}

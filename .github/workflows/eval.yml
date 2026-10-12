@@ -1,0 +1,25 @@
+name: eval
+on:
+  pull_request:
+    paths:
+      - 'apps/api/src/receiptiq_api/services/extraction.py'
+      - 'apps/api/src/receiptiq_api/prompts/**'
+      - 'evals/**'
+
+jobs:
+  eval:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: pip install -e ./apps/api
+      - run: pip install -r evals/requirements.txt
+      - run: cd evals && python run_eval.py
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+      - uses: actions/upload-artifact@v4
+        with:
+          name: eval-results
+          path: evals/results/
